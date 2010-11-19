@@ -35,6 +35,7 @@ class product_pricelist(osv.osv):
     _inherit = "product.pricelist"
     
     def price_get(self, cr, uid, ids, prod_id, qty, partner=None, context=None):
+#FIXME do we realy need to copy standard code rather than call super method ?
         '''
         context = {
             'uom': Unit of Measure (int),
