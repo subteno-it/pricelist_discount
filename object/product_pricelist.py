@@ -41,7 +41,6 @@ class product_pricelist(osv.osv):
             'date': Date of the pricelist (%Y-%m-%d),
         }
         '''
-        result = super(product_pricelist, self).price_get(cr, uid, prod_id, qty, partner=partner, context=context)
         context = context or {}
         currency_obj = self.pool.get('res.currency')
         product_obj = self.pool.get('product.product')
