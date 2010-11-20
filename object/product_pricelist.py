@@ -24,8 +24,6 @@
 ################################################################
 
 from osv import osv
-from osv import fields
-
 from product._common import rounding
 from tools.translate import _
 import time
@@ -33,7 +31,7 @@ import time
 class product_pricelist(osv.osv):
 
     _inherit = "product.pricelist"
-    
+
     def price_get(self, cr, uid, ids, prod_id, qty, partner=None, context=None):
 #FIXME do we realy need to copy standard code rather than call super method ?
         '''
@@ -43,6 +41,7 @@ class product_pricelist(osv.osv):
             'date': Date of the pricelist (%Y-%m-%d),
         }
         '''
+        result = super(product_pricelist, self).price_get(cr, uid, prod_id, qty, partner=partner, context=context)
         context = context or {}
         currency_obj = self.pool.get('res.currency')
         product_obj = self.pool.get('product.product')
@@ -105,7 +104,7 @@ class product_pricelist(osv.osv):
                     'AND (min_quantity IS NULL OR min_quantity <= %s) '
                     'AND i.price_version_id = v.id AND v.pricelist_id = pl.id '
                 'ORDER BY sequence LIMIT 1',
-                (tmpl_id, prod_id) + sqlargs + ( plversion['id'], qty))
+                (tmpl_id, prod_id) + sqlargs + (plversion['id'], qty))
             res = cr.dictfetchone()
             if res:
                 if res['base'] == -1:
@@ -122,7 +121,7 @@ class product_pricelist(osv.osv):
                 elif res['base'] == -2:
                     where = []
                     if partner:
-                        where = [('name', '=', partner) ]
+                        where = [('name', '=', partner)]
                     sinfo = supplierinfo_obj.search(cr, uid,
                             [('product_id', '=', tmpl_id)] + where)
                     price = 0.0
@@ -145,19 +144,19 @@ class product_pricelist(osv.osv):
 
                 price_limit = price
 
-                price = price * (1.0+(res['price_discount'] or 0.0))
+                price = price * (1.0 + (res['price_discount'] or 0.0))
                 price = rounding(price, res['price_round'])
                 price += (res['price_surcharge'] or 0.0)
                 if res['price_min_margin']:
-                    price = max(price, price_limit+res['price_min_margin'])
+                    price = max(price, price_limit + res['price_min_margin'])
                 if res['price_max_margin']:
-                    price = min(price, price_limit+res['price_max_margin'])
+                    price = min(price, price_limit + res['price_max_margin'])
             else:
                 # False means no valid line found ! But we may not raise an
                 # exception here because it breaks the search
                 price = False
             result[id] = price
-            result['discount'] = res.get('discount',0)
+            result['discount'] = res.get('discount', 0)
             if context and ('uom' in context):
                 product = product_obj.browse(cr, uid, prod_id)
                 uom = product.uos_id or product.uom_id
