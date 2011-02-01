@@ -25,7 +25,7 @@
 
 {
     'name': 'Pricelist Discount',
-    'version': '0.1.0',
+    'version': '0.1.1',
     'category': 'Custom',
     'description': """Product""",
     'author': 'SYLEAM Info Services',
