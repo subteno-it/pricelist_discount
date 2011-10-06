@@ -104,7 +104,7 @@ class product_pricelist(osv.osv):
                     'AND i.price_version_id = v.id AND v.pricelist_id = pl.id '
                 'ORDER BY sequence LIMIT 1',
                 (tmpl_id, prod_id) + sqlargs + (plversion['id'], qty))
-            res = cr.dictfetchone()
+            res = cr.dictfetchone() or {}
             if res:
                 if res['base'] == -1:
                     if not res['base_pricelist_id']:
