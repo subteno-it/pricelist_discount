@@ -53,6 +53,7 @@ class product_pricelist(osv.osv):
         date = time.strftime('%Y-%m-%d')
         if context and ('date' in context):
             date = context['date']
+        discount_ctx = 0.0
         result = {}
         for id in ids:
             cr.execute('SELECT * ' \
@@ -113,6 +114,8 @@ class product_pricelist(osv.osv):
                         price_tmp = self.price_get(cr, uid,
                                 [res['base_pricelist_id']], prod_id,
                                 qty, context=context)[res['base_pricelist_id']]
+                        if context and ('discount' in context):
+                            discount_ctx = context['discount']
                         ptype_src = self.browse(cr, uid,
                                 res['base_pricelist_id']).currency_id.id
                         price = currency_obj.compute(cr, uid, ptype_src,
@@ -155,7 +158,12 @@ class product_pricelist(osv.osv):
                 # exception here because it breaks the search
                 price = False
             result[id] = price
-            result['discount'] = res.get('discount', 0)
+            discount = res.get('discount', 0)
+            if discount_ctx:
+                result['discount'] = discount_ctx
+            if discount:
+                result['discount'] = discount
+                context['discount'] = discount
             if context and ('uom' in context):
                 product = product_obj.browse(cr, uid, prod_id)
                 uom = product.uos_id or product.uom_id
