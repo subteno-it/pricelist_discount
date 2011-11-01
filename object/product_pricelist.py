@@ -55,6 +55,7 @@ class product_pricelist(osv.osv):
             date = context['date']
         discount_ctx = 0.0
         result = {}
+        result['discount'] = 0.0
         for id in ids:
             cr.execute('SELECT * ' \
                     'FROM product_pricelist_version ' \
@@ -159,9 +160,9 @@ class product_pricelist(osv.osv):
                 price = False
             result[id] = price
             discount = res.get('discount', 0)
-            if discount_ctx:
+            if discount_ctx and not result['discount']:
                 result['discount'] = discount_ctx
-            if discount:
+            if discount and not result['discount']:
                 result['discount'] = discount
                 context['discount'] = discount
             if context and ('uom' in context):
