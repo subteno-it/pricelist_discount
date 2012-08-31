@@ -22,8 +22,24 @@
 #
 ################################################################
 
-import product_pricelist
-import product_pricelist_item
-
+{
+    'name': 'Pricelist Discount',
+    'version': '0.1.2',
+    'category': 'Custom',
+    'description': """Product""",
+    'author': 'SYLEAM Info Services',
+    'depends': [
+            'base',
+            'product',
+        ],
+    'init_xml': [],
+    'update_xml': [
+        'view/product_pricelist_item_view.xml',
+        ],
+    'demo_xml': [],
+    'installable': True,
+    'active': False,
+    'license': 'AGPL-3',
+}
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
