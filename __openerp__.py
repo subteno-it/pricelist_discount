@@ -34,7 +34,7 @@
         ],
     'init_xml': [],
     'update_xml': [
-        'view/product_pricelist_item_view.xml',
+        'product_view.xml',
         ],
     'demo_xml': [],
     'installable': True,
