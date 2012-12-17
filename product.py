@@ -36,6 +36,8 @@ class product_pricelist(osv.osv):
         """
         Add discount if set in result
         """
+        if context is None:
+            context = {}
         result = super(product_pricelist, self).price_get(cr, uid, ids, prod_id, qty, partner=partner, context=context)
         if 'discount' in context:
             discount = self.pool.get('product.pricelist.item').browse(cr, uid, result['item_id'].values()[0], context=context).discount or False
