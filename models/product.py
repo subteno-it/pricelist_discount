@@ -25,41 +25,31 @@
 #
 ##############################################################################
 
-from osv import osv
-from osv import fields
+from openerp import models, api, fields
+from openerp.addons import decimal_precision as dp
 
 
-class product_pricelist(osv.osv):
+class product_pricelist(models.Model):
     _inherit = "product.pricelist"
 
-    def price_get(self, cr, uid, ids, prod_id, qty, partner=None, context=None):
+    @api.multi
+    def price_get(self, prod_id, qty, partner=None):
         """
         Add discount if set in result
         """
-        if context is None:
-            context = {}
-        result = super(product_pricelist, self).price_get(cr, uid, ids, prod_id, qty, partner=partner, context=context)
-        if 'discount' in context:
-            discount = self.pool.get('product.pricelist.item').browse(cr, uid, result['item_id'].values()[0], context=context).discount or False
+        result = super(product_pricelist, self).price_get(prod_id, qty, partner=partner)
+
+        if 'discount' in self.env.context:
+            discount = self.env['product.pricelist.item'].browse(result['item_id'].values()[0]).discount or False
             if discount:
                 result.update({'discount': discount})
+
         return result
 
-product_pricelist()
 
-
-class product_pricelist_item(osv.osv):
+class product_pricelist_item(models.Model):
     _inherit = 'product.pricelist.item'
 
-    _columns = {
-        'discount': fields.float('Discount (%)', digits=(16, 2)),
-    }
-
-    _defaults = {
-        'discount': 0.0,
-    }
-
-product_pricelist_item()
-
+    discount = fields.Float(string='Discount (%)', digits_compute=dp.get_precision('Product Price'), help='Discount on this pricelist item')
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

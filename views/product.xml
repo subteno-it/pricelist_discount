@@ -29,7 +29,6 @@
             <field name="name">product.pricelist.item</field>
             <field name="model">product.pricelist.item</field>
             <field name="inherit_id" ref="product.product_pricelist_item_form_view" />
-            <field name="type">tree</field>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='price_max_margin']" position="after">
                     <group colspan="3">
@@ -39,6 +38,5 @@
                 </xpath>
             </field>
         </record>
-
     </data>
 </openerp>

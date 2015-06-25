@@ -25,22 +25,6 @@
 #
 ##############################################################################
 
-{
-    'name': 'Pricelist Discount',
-    'version': '0.1.2',
-    'category': 'Sales Management',
-    'description': """Add discount in pricelist""",
-    'author': 'SYLEAM',
-    'depends': [
-        'base',
-        'product',
-    ],
-    'data': [
-        'views/product.xml',
-    ],
-    'installable': True,
-    'active': False,
-    'license': 'AGPL-3',
-}
+import product
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
