@@ -32,9 +32,9 @@
             <field name="model">product.pricelist.item</field>
             <field name="inherit_id" ref="product.product_pricelist_item_form_view" />
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='price_max_margin']" position="after">
-                    <group colspan="3">
-                        <separator colspan="4" string="Others Informations"/>
+                <xpath expr="//form" position="inside">
+                    <group>
+                        <separator colspan="2" string="Direct discount"/>
                         <field name="discount"/>
                     </group>
                 </xpath>

@@ -25,7 +25,7 @@
 #
 ##############################################################################
 
-import product_pricelist
 import product_pricelist_item
+import sale_order_line
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

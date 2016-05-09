@@ -34,6 +34,7 @@
     'depends': [
         'base',
         'product',
+        'sale',
     ],
     'data': [
         'views/product_pricelist_item.xml',

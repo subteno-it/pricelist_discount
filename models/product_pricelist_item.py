@@ -36,4 +36,5 @@ class ProductPricelistItem(models.Model):
 
     discount = fields.Float(string='Discount (%)', digits_compute=dp.get_precision('Product Price'), help='Discount on this pricelist item')
 
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

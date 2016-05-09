@@ -30,23 +30,19 @@
 from openerp import models, api
 
 
-class ProductPricelist(models.Model):
-    _inherit = "product.pricelist"
+class SaleOrderLine(models.Model):
+    _inherit = 'sale.order.line'
 
-    @api.multi
-    def price_get(self, prod_id, qty, partner=None):
+    @api.onchange('product_id')
+    def get_discount(self):
         """
-        Add discount if set in result
+        Get the discount for the appropriate item
         """
-        result = super(ProductPricelist, self).price_get(prod_id, qty, partner=partner)
-
-        if 'discount' in self.env.context:
-            discount = self.env['product.pricelist.item'].browse(result['item_id'].values()[0]).discount or False
-            if discount:
-                result.update({'discount': discount})
-
-        return result
-
+        if self.order_id.pricelist_id and self.product_id and self.order_id.partner_id:
+            qtys = [(self.product_id, self.product_uom_qty, self.order_id.partner_id.id)]
+            pricelist_item_id = self.order_id.pricelist_id._price_rule_get_multi(self.order_id.pricelist_id, qtys)[self.product_id.id][1]
+            self.discount = self.env['product.pricelist.item'].browse(pricelist_item_id).discount
+            print '######', self.discount
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
