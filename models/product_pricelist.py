@@ -7,6 +7,8 @@
 #    Copyright (C) 2012 SYLEAM Info Services (<http://www.syleam.fr/>)
 #              Benoît MOTTIN <benoit.mottin@syleam.fr>
 #              Sebastien LANGE <sebastien.lange@syleam.fr>
+#    Copyright (C) 2016 SYLEAM Info Services (<http://www.syleam.fr/>)
+#              Chris TRIBBECK <chris.tribbeck@syleam.fr>
 #
 #    This file is a part of pricelist_discount
 #
@@ -25,22 +27,26 @@
 #
 ##############################################################################
 
-{
-    'name': 'Pricelist Discount',
-    'version': '0.1.2',
-    'category': 'Sales Management',
-    'description': """Add discount in pricelist""",
-    'author': 'SYLEAM',
-    'depends': [
-        'base',
-        'product',
-    ],
-    'data': [
-        'views/product_pricelist_item.xml',
-    ],
-    'installable': True,
-    'active': False,
-    'license': 'AGPL-3',
-}
+from openerp import models, api
+
+
+class ProductPricelist(models.Model):
+    _inherit = "product.pricelist"
+
+    @api.multi
+    def price_get(self, prod_id, qty, partner=None):
+        """
+        Add discount if set in result
+        """
+        result = super(ProductPricelist, self).price_get(prod_id, qty, partner=partner)
+
+        if 'discount' in self.env.context:
+            discount = self.env['product.pricelist.item'].browse(result['item_id'].values()[0]).discount or False
+            if discount:
+                result.update({'discount': discount})
+
+        return result
+
+
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

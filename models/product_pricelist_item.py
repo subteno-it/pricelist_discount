@@ -7,6 +7,8 @@
 #    Copyright (C) 2012 SYLEAM Info Services (<http://www.syleam.fr/>)
 #              Benoît MOTTIN <benoit.mottin@syleam.fr>
 #              Sebastien LANGE <sebastien.lange@syleam.fr>
+#    Copyright (C) 2016 SYLEAM Info Services (<http://www.syleam.fr/>)
+#              Chris TRIBBECK <chris.tribbeck@syleam.fr>
 #
 #    This file is a part of pricelist_discount
 #
@@ -25,29 +27,11 @@
 #
 ##############################################################################
 
-from openerp import models, api, fields
+from openerp import models, fields
 from openerp.addons import decimal_precision as dp
 
 
-class product_pricelist(models.Model):
-    _inherit = "product.pricelist"
-
-    @api.multi
-    def price_get(self, prod_id, qty, partner=None):
-        """
-        Add discount if set in result
-        """
-        result = super(product_pricelist, self).price_get(prod_id, qty, partner=partner)
-
-        if 'discount' in self.env.context:
-            discount = self.env['product.pricelist.item'].browse(result['item_id'].values()[0]).discount or False
-            if discount:
-                result.update({'discount': discount})
-
-        return result
-
-
-class product_pricelist_item(models.Model):
+class ProductPricelistItem(models.Model):
     _inherit = 'product.pricelist.item'
 
     discount = fields.Float(string='Discount (%)', digits_compute=dp.get_precision('Product Price'), help='Discount on this pricelist item')
